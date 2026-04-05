@@ -6,6 +6,8 @@ import html2canvas from "html2canvas";
 
 function App() {
   const [texto, setTexto] = useState<string>("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [desc, setDesc] = useState<string>("");
 
   const cardSize: cardSize = {
@@ -13,10 +15,27 @@ function App() {
     y: 283,
   };
 
+  const character_portrait: cardSize = {
+    x: 150,
+    y: 125,
+    offset_x: 220,
+    offset_y: 40,
+  };
+
   const textoPrueba = "Lorem ipsum dolor";
 
   const handle_change = (e: ChangeEvent<HTMLInputElement>) => {
     setTexto(e.target.value);
+  };
+
+  const handle_img = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setImageFile(file);
+
+    const url = URL.createObjectURL(file);
+    setImageUrl(url);
   };
 
   const handle_desc_change = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -54,18 +73,20 @@ function App() {
           id="imagen"
           className="konva-card"
         >
-          <Card src="src/assets/papiro.jpg" cardSize={cardSize}></Card>
-          <Card src="src/assets/carta_personaje.png" cardSize={cardSize}></Card>
+          <Card src="src/assets/papiro.jpg" cardSize={cardSize} />
+          {imageUrl && <Card src={imageUrl} cardSize={character_portrait} />}
+          <Card src="src/assets/carta_personaje.png" cardSize={cardSize} />
           <Layer>
             <Text
               text={texto}
               fill={"black"}
-              fontSize={16}
+              fontSize={12}
               x={234}
-              y={18}
+              y={20}
               fontFamily="Papyrus"
             ></Text>
           </Layer>
+
           <Layer>
             <Text
               text={desc}
@@ -85,8 +106,14 @@ function App() {
             onChange={handle_change}
             placeholder="Inserte nombre del personaje"
             className="textfield"
-            maxLength={16}
+            maxLength={20}
           />
+          <div>
+            {(imageUrl && (
+              <img src={imageUrl} alt="preview" style={{ width: 150 }} />
+            )) || <p>Seleccione una imagen para el personaje</p>}
+            <input type="file" accept="image/*" onChange={handle_img} />
+          </div>
           <textarea
             value={desc}
             onChange={handle_desc_change}

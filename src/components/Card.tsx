@@ -9,6 +9,8 @@ interface cardProps {
 export interface cardSize {
   x: number;
   y: number;
+  offset_x?: number;
+  offset_y?: number;
 }
 
 export default function Card({ src, cardSize, ...rest }: cardProps) {
@@ -19,6 +21,8 @@ export default function Card({ src, cardSize, ...rest }: cardProps) {
         image={image}
         width={cardSize.x}
         height={cardSize.y}
+        x={cardSize.offset_x || 0}
+        y={cardSize.offset_y || 0}
         {...rest}
       ></Image>
     </Layer>
