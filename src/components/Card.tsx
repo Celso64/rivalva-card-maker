@@ -1,4 +1,4 @@
-import { Stage, Layer, Rect, Text, Image } from "react-konva";
+import { Layer, Image } from "react-konva";
 import useImage from "use-image";
 
 interface cardProps {

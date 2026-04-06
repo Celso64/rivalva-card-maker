@@ -1,12 +1,12 @@
 import "./App.css";
-import { Stage, Layer, Rect, Text } from "react-konva";
+import { Stage, Layer, Text } from "react-konva";
 import Card, { type cardSize } from "./components/Card";
 import { useState, type ChangeEvent } from "react";
 import html2canvas from "html2canvas";
 
 function App() {
   const [texto, setTexto] = useState<string>("");
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  // const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [desc, setDesc] = useState<string>("");
 
@@ -22,8 +22,6 @@ function App() {
     offset_y: 40,
   };
 
-  const textoPrueba = "Lorem ipsum dolor";
-
   const handle_change = (e: ChangeEvent<HTMLInputElement>) => {
     setTexto(e.target.value);
   };
@@ -32,7 +30,7 @@ function App() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setImageFile(file);
+    // setImageFile(file);
 
     const url = URL.createObjectURL(file);
     setImageUrl(url);
