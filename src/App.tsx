@@ -3,6 +3,8 @@ import { Stage, Layer, Text } from "react-konva";
 import Card, { type cardSize } from "./components/Card";
 import { useState, type ChangeEvent } from "react";
 import html2canvas from "html2canvas";
+import papiro from "./assets/papiro.jpg";
+import carta from "./assets/carta_personaje.png";
 
 function App() {
   const [texto, setTexto] = useState<string>("");
@@ -71,9 +73,9 @@ function App() {
           id="imagen"
           className="konva-card"
         >
-          <Card src="src/assets/papiro.jpg" cardSize={cardSize} />
+          <Card src={papiro} cardSize={cardSize} />
           {imageUrl && <Card src={imageUrl} cardSize={character_portrait} />}
-          <Card src="src/assets/carta_personaje.png" cardSize={cardSize} />
+          <Card src={carta} cardSize={cardSize} />
           <Layer>
             <Text
               text={texto}
