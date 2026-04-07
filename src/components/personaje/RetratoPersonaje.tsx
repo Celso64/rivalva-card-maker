@@ -1,6 +1,5 @@
 import {
   CloseButton,
-  Code,
   FileUpload,
   Input,
   InputGroup,

@@ -1,29 +1,18 @@
 import "./App.css";
-import { Stage, Layer, Text, type StageProps } from "react-konva";
+import { Stage, Layer, Text } from "react-konva";
 import Card, { type cardSize } from "./components/Card";
-import { useRef, useState, type ChangeEvent } from "react";
-import html2canvas from "html2canvas";
+import { useRef, useState } from "react";
 import papiro from "./assets/papiro.jpg";
 import carta from "./assets/carta_personaje.png";
-import {
-  Button,
-  DownloadTrigger,
-  Grid,
-  GridItem,
-  Heading,
-  HStack,
-  Stack,
-} from "@chakra-ui/react";
+import { Button, Grid, GridItem, Heading, HStack } from "@chakra-ui/react";
 import NombrePersonaje from "./components/personaje/NombrePersonaje";
 import DescripcionPersonaje from "./components/personaje/DescripcionPersonaje";
 import RetratoPersonaje from "./components/personaje/RetratoPersonaje";
-import { FaFileDownload, FaHammer } from "react-icons/fa";
+import { FaFileDownload } from "react-icons/fa";
 import Avatar from "./components/personaje/Avatar";
 
 function App() {
   const [texto, setTexto] = useState<string>("");
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imageTitle, setImageTitle] = useState<String>("");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [desc, setDesc] = useState<string>("");
 
@@ -45,41 +34,40 @@ function App() {
     setTexto(e);
   };
 
-  const handle_img = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  // const handle_img = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (!file) return;
 
-    setImageFile(file);
-    setImageTitle(e.target.name);
+  //   setImageTitle(e.target.name);
 
-    const url = URL.createObjectURL(file);
-    setImageUrl(url);
-  };
+  //   const url = URL.createObjectURL(file);
+  //   setImageUrl(url);
+  // };
 
   const handle_desc_change = (e: string) => {
     setDesc(e);
   };
 
-  const handle_btn = () => {
-    const origen: HTMLElement | null = document.querySelector("#imagen");
+  // const handle_btn = () => {
+  //   const origen: HTMLElement | null = document.querySelector("#imagen");
 
-    if (origen) {
-      html2canvas(origen, {
-        width: cardSize.x,
-        height: cardSize.y,
-      }).then((c) => {
-        const destino: HTMLElement | null = document.getElementById("destino");
-        if (destino) {
-          const hijo: ChildNode | null = destino.firstChild;
-          if (hijo) {
-            destino.replaceChild(c, hijo);
-          } else {
-            destino.appendChild(c);
-          }
-        }
-      });
-    }
-  };
+  //   if (origen) {
+  //     html2canvas(origen, {
+  //       width: cardSize.x,
+  //       height: cardSize.y,
+  //     }).then((c) => {
+  //       const destino: HTMLElement | null = document.getElementById("destino");
+  //       if (destino) {
+  //         const hijo: ChildNode | null = destino.firstChild;
+  //         if (hijo) {
+  //           destino.replaceChild(c, hijo);
+  //         } else {
+  //           destino.appendChild(c);
+  //         }
+  //       }
+  //     });
+  //   }
+  // };
 
   function downloadURI(uri: string, name: string) {
     var link = document.createElement("a");
@@ -149,9 +137,7 @@ function App() {
             <NombrePersonaje handler_change={handle_change} />
 
             <HStack>
-              {imageUrl && (
-                <Avatar image_url={imageUrl} alt_text={imageTitle.toString()} />
-              )}
+              {imageUrl && <Avatar image_url={imageUrl} />}
 
               <RetratoPersonaje set_image_url={setImageUrl} />
             </HStack>
