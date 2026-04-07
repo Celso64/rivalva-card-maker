@@ -1,6 +1,6 @@
 import "./App.css";
 import { Stage, Layer, Text } from "react-konva";
-import Card, { type cardSize } from "./components/Card";
+import Card from "./components/Card";
 import { useRef, useState } from "react";
 import papiro from "./assets/papiro.jpg";
 import carta from "./assets/carta_personaje.png";
@@ -10,122 +10,78 @@ import DescripcionPersonaje from "./components/personaje/DescripcionPersonaje";
 import RetratoPersonaje from "./components/personaje/RetratoPersonaje";
 import { FaFileDownload } from "react-icons/fa";
 import Avatar from "./components/personaje/Avatar";
+import {
+  CHARACTER_CARD_SIZE,
+  CHARACTER_PORTRAIT_SIZE,
+} from "./constants/CardSize";
+import { downloadURI } from "./utils/DownloadURI";
+import "./assets/fonts/papyrus.ttf";
 
 function App() {
-  const [texto, setTexto] = useState<string>("");
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [desc, setDesc] = useState<string>("");
-
-  const cardSize: cardSize = {
-    x: 400,
-    y: 283,
-  };
+  const [nombre_personaje, set_nombre_personaje] = useState<string>("");
+  const [image_url, set_image_url] = useState<string | null>(null);
+  const [descripcion_personaje, set_descripcion_personaje] =
+    useState<string>("");
 
   const lienzo_ref = useRef<any>(null);
 
-  const character_portrait: cardSize = {
-    x: 150,
-    y: 125,
-    offset_x: 220,
-    offset_y: 40,
-  };
+  const handle_change = (e: string) => set_nombre_personaje(e);
+  const handle_desc_change = (e: string) => set_descripcion_personaje(e);
 
-  const handle_change = (e: string) => {
-    setTexto(e);
-  };
-
-  // const handle_img = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = e.target.files?.[0];
-  //   if (!file) return;
-
-  //   setImageTitle(e.target.name);
-
-  //   const url = URL.createObjectURL(file);
-  //   setImageUrl(url);
-  // };
-
-  const handle_desc_change = (e: string) => {
-    setDesc(e);
-  };
-
-  // const handle_btn = () => {
-  //   const origen: HTMLElement | null = document.querySelector("#imagen");
-
-  //   if (origen) {
-  //     html2canvas(origen, {
-  //       width: cardSize.x,
-  //       height: cardSize.y,
-  //     }).then((c) => {
-  //       const destino: HTMLElement | null = document.getElementById("destino");
-  //       if (destino) {
-  //         const hijo: ChildNode | null = destino.firstChild;
-  //         if (hijo) {
-  //           destino.replaceChild(c, hijo);
-  //         } else {
-  //           destino.appendChild(c);
-  //         }
-  //       }
-  //     });
-  //   }
-  // };
-
-  function downloadURI(uri: string, name: string) {
-    var link = document.createElement("a");
-    link.download = name;
-    link.href = uri;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
-  const handleExport = () => {
+  const handle_export = () => {
     if (lienzo_ref && lienzo_ref.current) {
       const uri = lienzo_ref.current.toDataURL();
-      downloadURI(uri, (texto || "personaje") + ".png");
+      downloadURI(uri, (nombre_personaje || "personaje") + ".png");
     }
   };
 
   return (
     <>
-      <Heading size="6xl" margin={"4vh"}>
+      <Heading size="6xl" margin={"4vh"} fontFamily={"papyrus"}>
         Rivalva Card Maker
       </Heading>
       <Grid templateColumns="repeat(2, 1fr)">
         <GridItem>
           <div style={{ display: "flex" }}>
             <Stage
-              width={cardSize.x}
-              height={cardSize.y}
+              width={CHARACTER_CARD_SIZE.x}
+              height={CHARACTER_CARD_SIZE.y}
               id="imagen"
               className="konva-card"
               ref={lienzo_ref}
             >
-              <Card src={papiro} cardSize={cardSize} />
-              {imageUrl && (
-                <Card src={imageUrl} cardSize={character_portrait} />
+              <Card src={papiro} cardSize={CHARACTER_CARD_SIZE} />
+              {image_url && (
+                <Card src={image_url} cardSize={CHARACTER_PORTRAIT_SIZE} />
               )}
-              <Card src={carta} cardSize={cardSize} />
+              <Card src={carta} cardSize={CHARACTER_CARD_SIZE} />
               <Layer>
                 <Text
-                  text={texto}
+                  text={nombre_personaje}
                   fill={"black"}
                   fontSize={12}
-                  x={234}
-                  y={20}
+                  x={220}
+                  y={16}
+                  width={150}
+                  height={24}
                   fontFamily="Papyrus"
+                  align="center"
+                  verticalAlign="middle"
                 ></Text>
               </Layer>
 
               <Layer>
                 <Text
-                  text={desc}
+                  text={descripcion_personaje}
                   fill={"black"}
                   fontSize={12}
                   x={210}
-                  y={170}
-                  width={160}
-                  height={180}
+                  y={165}
+                  width={165}
+                  height={100}
                   fontFamily="Papyrus"
+                  align="center"
+                  verticalAlign="middle"
                 ></Text>
               </Layer>
             </Stage>
@@ -137,13 +93,13 @@ function App() {
             <NombrePersonaje handler_change={handle_change} />
 
             <HStack>
-              {imageUrl && <Avatar image_url={imageUrl} />}
+              {image_url && <Avatar image_url={image_url} />}
 
-              <RetratoPersonaje set_image_url={setImageUrl} />
+              <RetratoPersonaje set_image_url={set_image_url} />
             </HStack>
             <DescripcionPersonaje handler_change={handle_desc_change} />
 
-            <Button colorPalette="teal" onClick={handleExport} variant="solid">
+            <Button colorPalette="teal" onClick={handle_export} variant="solid">
               <FaFileDownload /> Descargar Personaje
             </Button>
           </div>
